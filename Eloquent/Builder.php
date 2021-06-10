@@ -74,7 +74,11 @@ class Builder extends EloquentBuilder
         if ($modelClass) {
             return in_array(SoftDeletes::class, class_uses_recursive($modelClass));
         }
-        throw new ModelNotFoundException($table);
+
+        /**
+         * @TODO: log this error
+         */
+        //throw new ModelNotFoundException($table);
     }
 
     /**
