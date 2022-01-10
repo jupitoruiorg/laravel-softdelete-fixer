@@ -66,6 +66,8 @@ class Builder extends EloquentBuilder
     protected function checkSoftDelete($table)
     {
         $model = $this->getModelName($table);
+        $model = str_starts_with($model, 'Z') ? ltrim($model, 'Z') : $model;
+
         $modelClass = $this->modelFinder->getModel($model, $this->model);
         if ($modelClass) {
             return in_array(SoftDeletes::class, class_uses_recursive($modelClass));
@@ -97,10 +99,24 @@ class Builder extends EloquentBuilder
     {
         if (!$withTrash) {
             if ($this->checkSoftDelete($table)) {
-                return parent::join($table, $first, $operator, $second, $type, $where)
-                    ->where("$table.deleted_at", null);
+
+                return parent::join($table, function($query) use ($first, $operator, $second, $table) {
+                    $query
+                        ->on($first, $operator, $second)
+                        ->where("$table.deleted_at", null)
+                    ;
+                }, null, null, $type);
+
+                //return parent::join($table, $first, $operator, $second, $type, $where)
+                //    ->join($table, 'deleted_at', $operator, $second, $type, true);
+                //->where("$table.deleted_at", null);
             }
         }
         return parent::join($table, $first, $operator, $second, $type, $where);
+    }
+
+    public function leftJoin($table, $first, $operator = null, $second = null)
+    {
+        return $this->join($table, $first, $operator, $second, 'left');
     }
 }
