@@ -115,8 +115,13 @@ class Builder extends EloquentBuilder
         return parent::join($table, $first, $operator, $second, $type, $where);
     }
 
-    public function leftJoin($table, $first, $operator = null, $second = null)
+    public function leftJoin($table, $first, $operator = null, $second = null, $withTrash = false)
     {
-        return $this->join($table, $first, $operator, $second, 'left');
+        return $this->join($table, $first, $operator, $second, 'left', false, $withTrash);
+    }
+
+    public function rightJoin($table, $first, $operator = null, $second = null, $withTrash = false)
+    {
+        return $this->join($table, $first, $operator, $second, 'right', false, $withTrash);
     }
 }
