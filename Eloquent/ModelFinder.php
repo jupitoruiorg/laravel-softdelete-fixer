@@ -70,12 +70,20 @@ class ModelFinder
                 if (class_basename($class) === $modelName) {
                     return $class;
                 }
+
+                $reflectionClass = new \ReflectionClass($class);
+                if ($reflectionClass->isAbstract()) {
+                    continue;
+                }
+
                 $modelInstance = (object)new $class;
+
                 if ($modelInstance->getTable() === $modelName) {
                     return $class;
                 }
             }
         }
+        
         return false;
     }
 
