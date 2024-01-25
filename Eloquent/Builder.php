@@ -6,6 +6,8 @@ use BlackPlatinum\Exceptions\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Closure;
 
@@ -33,6 +35,10 @@ class Builder extends EloquentBuilder
      */
     protected function getModelName($table)
     {
+        if (is_a($table, Expression::class)) {
+            $table = $table->getValue(DB::connection()->getQueryGrammar());
+        }
+
         return Str::studly(Str::singular($table));
     }
 
