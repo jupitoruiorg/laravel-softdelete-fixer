@@ -35,8 +35,8 @@ class Builder extends EloquentBuilder
      */
     protected function getModelName($table)
     {
-        if (is_a($table, Expression::class)) {
-            $table = $table->getValue(DB::connection()->getQueryGrammar());
+        if (function_exists('db_raw_to_string')) {
+            $table = db_raw_to_string($table);
         }
 
         return Str::studly(Str::singular($table));
