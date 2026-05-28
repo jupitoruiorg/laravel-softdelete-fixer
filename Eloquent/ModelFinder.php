@@ -112,7 +112,8 @@ class ModelFinder
     private function getModelClassFormCurrentModel($modelName, $model = null)
     {
         $thisClass = get_class($model);
-        $namespace = str_replace(class_basename($thisClass), '', $thisClass);
+        $lastSep = strrpos($thisClass, '\\');
+        $namespace = $lastSep !== false ? substr($thisClass, 0, $lastSep + 1) : '';
         if (!class_exists($namespace . $modelName)) {
             return false;
         }
