@@ -12,7 +12,7 @@ class ModelNotFoundException extends RuntimeException
      */
     private $table;
 
-    public function __construct($table = "", $code = 0, Throwable $previous = null)
+    public function __construct($table = "", $code = 0, ?Throwable $previous = null)
     {
         parent::__construct("Can't find table {$table} for Model", $code, $previous);
         $this->table = $table;
